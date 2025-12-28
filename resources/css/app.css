@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        /* Brighter gradient transition */
+        @apply bg-gradient-to-br from-white via-aesthetic-sky/30 to-aesthetic-lavender/30 min-h-screen text-aesthetic-ink;
+    }
+}
+
+.chic-card {
+    /* Less transparency, more solid white for readability */
+    @apply bg-white/80 backdrop-blur-lg border border-white shadow-xl rounded-[2rem];
+}
