@@ -1,18 +1,21 @@
-# Use official Python image
+# Use official Python slim image
 FROM python:3.11-slim
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy only requirements first (Docker layer caching)
+COPY requirements.txt .
 
-# Upgrade pip and install dependencies
+# Install dependencies
 RUN python -m pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
+# Copy the rest of the project
+COPY . .
+
+# Expose port for Render
 EXPOSE 10000
 
-# Run the app
+# Run FastAPI with uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
