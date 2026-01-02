@@ -251,7 +251,7 @@
     </main>
 
     <script>
-        // Toggle Logic for New Resume Upload
+       
         function toggleNewUpload(show) {
             const field = document.getElementById('new-resume-field');
             const input = document.getElementById('resume_file_input');
@@ -264,21 +264,20 @@
             }
         }
 
-        // Display Filename for JD
         document.querySelector('input[name="jd_file"]').onchange = function() {
             if(this.files[0]) {
                 document.getElementById('jd-file-name').innerText = "Selected: " + this.files[0].name.substring(0, 15) + "...";
             }
         };
 
-        // Display Filename for Resume
+      
         document.getElementById('resume_file_input').onchange = function() {
             if(this.files[0]) {
                 document.getElementById('file-name-display').innerText = "Selected: " + this.files[0].name.substring(0, 15) + "...";
             }
         };
 
-        // Progress Chart
+       
         const ctx = document.getElementById('progressChart')?.getContext('2d');
         if(ctx) {
             new Chart(ctx, {

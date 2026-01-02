@@ -12,7 +12,7 @@ class JobRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear existing data to avoid duplicates if you run it multiple times
+    
         DB::table('job_roles')->truncate();
 
         DB::table('job_roles')->insert([

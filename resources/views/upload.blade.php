@@ -43,7 +43,7 @@
 <body class="bg-[#F8FAFC] min-h-screen text-aesthetic-ink">
 
     <div class="bg-aesthetic-ink text-white px-6 py-2 flex justify-between items-center text-[10px] font-bold tracking-widest uppercase">
-        <span><span class="text-aesthetic-mint">●</span> Database: {{ Auth::user()->detected_skills === null ? 'Empty' : 'Active (' . count(Auth::user()->detected_skills) . ')' }}</span>
+       
         <span>User: {{ Auth::user()->email }}</span>
     </div>
 
@@ -128,7 +128,7 @@
                     <div class="absolute bottom-0 left-0 w-64 h-64 bg-aesthetic-rose/20 rounded-full -ml-24 -mb-24 blur-3xl"></div>
 
                     <div class="mb-12 relative z-10">
-                        <h2 class="text-5xl font-black text-aesthetic-ink tracking-tighter leading-none mb-4">Resume AI</h2>
+                        <h2 class="text-5xl font-black text-aesthetic-ink tracking-tighter leading-none mb-4">Resume Analyzer</h2>
                         <p class="text-lg text-slate-600 font-medium">Deep-match analysis for best career options!</p>
                     </div>
 
@@ -198,7 +198,7 @@
     </main>
 
     <script>
-        // Toggle function for the New Upload section
+        
         function toggleNewUpload(show) {
             const field = document.getElementById('new-resume-field');
             const fileInput = field.querySelector('input[type="file"]');

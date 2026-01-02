@@ -19,7 +19,7 @@ Route::get('/', function () {
 // 2. SkillPulse Core Features (Protected by Auth)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // Main View (Mapped to both 'upload' and 'dashboard' names to fix navigation errors)
+ 
     Route::get('/dashboard', [ResumeController::class, 'showUploadForm'])->name('dashboard');
     Route::get('/upload', [ResumeController::class, 'showUploadForm'])->name('upload');
     
@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/analyze', [ResumeController::class, 'analyze'])->name('analyze');
     
     // --- MANUAL SKILLS MANAGEMENT ---
-    // These handle the Add/Remove buttons in your sidebar
+    
     Route::post('/skills/add', [SkillController::class, 'add'])->name('skills.add');
     Route::post('/skills/remove', [SkillController::class, 'remove'])->name('skills.remove');
 });

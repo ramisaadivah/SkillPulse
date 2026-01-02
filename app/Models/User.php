@@ -50,9 +50,7 @@ class User extends Authenticatable
         'detected_skills' => 'array', 
     ];
 
-    /**
-     * Relationship: A user can have many analysis records.
-     */
+    
     public function analysisHistories()
     {
         return $this->hasMany(AnalysisHistory::class);

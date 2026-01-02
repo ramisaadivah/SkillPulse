@@ -21,18 +21,7 @@
         </div>
 
         <div class="grid md:grid-cols-2 gap-8 mb-8">
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-green-100">
-                <h3 class="text-green-600 font-bold text-lg mb-4 flex items-center">
-                    <span class="bg-green-100 p-2 rounded-lg mr-3">✔</span> Skills Detected
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                    @forelse($matched as $skill)
-                        <span class="bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-xl text-sm font-bold uppercase">{{ $skill }}</span>
-                    @empty
-                        <p class="text-slate-400 italic">No matching skills detected in your resume.</p>
-                    @endforelse
-                </div>
-            </div>
+            
 
             <div class="bg-white p-8 rounded-3xl shadow-sm border border-red-100">
                 <h3 class="text-red-600 font-bold text-lg mb-4 flex items-center">
@@ -46,6 +35,20 @@
                     @endforelse
                 </div>
             </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-green-100">
+                <h3 class="text-green-600 font-bold text-lg mb-4 flex items-center">
+                    <span class="bg-green-100 p-2 rounded-lg mr-3">✔</span> Skills Detected
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    @forelse($matched as $skill)
+                        <span class="bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-xl text-sm font-bold uppercase">{{ $skill }}</span>
+                    @empty
+                        <p class="text-slate-400 italic">No matching skills detected in your resume.</p>
+                    @endforelse
+                </div>
+            </div>
+            
         </div>
 
         @if(isset($other_careers) && count($other_careers) > 0)
@@ -81,7 +84,7 @@
         @if(count($roadmap) > 0)
         <div class="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl">
             <h3 class="text-2xl font-bold mb-8 flex items-center">
-                <span class="bg-blue-600 p-2 rounded-lg mr-4">🚀</span> Learning Roadmap
+                <span class="bg-blue-600 p-2 rounded-lg mr-4">🚀</span> Follow the Roadmap to master the following skills.
             </h3>
             <div class="grid md:grid-cols-2 gap-6">
                 @foreach($roadmap as $skill => $data)

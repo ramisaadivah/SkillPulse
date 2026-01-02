@@ -33,7 +33,7 @@ class ResumeController extends Controller
 
         $jobs = $jobsQuery->limit(4)->get();
 
-        // FALLBACK: Show all jobs if no matches found
+       
         if ($jobs->isEmpty()) {
             $jobs = DB::table('job_roles')->latest()->limit(4)->get();
         }
@@ -47,7 +47,7 @@ class ResumeController extends Controller
     }
 
     public function analyze(Request $request) {
-        // Prevent PHP from timing out while Python works
+        
         set_time_limit(0); 
 
         $request->validate([
@@ -71,7 +71,7 @@ class ResumeController extends Controller
                 $path = $resumeFile->store('resumes', 'public');
             }
 
-            // High timeout (120s) to handle the PDF analysis of roles like Webmaster 
+          
             $response = Http::timeout(120)->attach(
                 'resume', $resumeContent, $resumeName
             )->attach(
@@ -84,7 +84,7 @@ class ResumeController extends Controller
 
             $data = $response->json();
             
-            // Sync skills like WordPress, HTML, and CakePHP from the PDF 
+            
             $newSkills = $data['matched'] ?? [];
             $existingSkills = $user->detected_skills ?? [];
             $user->detected_skills = array_values(array_unique(array_merge($existingSkills, $newSkills)));
