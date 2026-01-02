@@ -4,6 +4,11 @@ import io
 
 app = FastAPI()
 
+if __name__ == "__main__":
+    # Get the port from Render's environment, default to 10000 if not found
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
 SKILL_DB = ["python", "javascript", "php", "laravel", "sql", "aws", "react", "tailwind", "machine learning", "nlp", "security", "docker", "git", "java", "linux"]
 
 def extract_text_from_pdf(pdf_content):
