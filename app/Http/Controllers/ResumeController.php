@@ -76,7 +76,8 @@ class ResumeController extends Controller
                 'resume', $resumeContent, $resumeName
             )->attach(
                 'jd', file_get_contents($jdFile), $jdFile->getClientOriginalName()
-            )->post('http://127.0.0.1:8000/compare-job-resume');
+            )->post('https://skillpulse-4.onrender.com/compare-job-resume')
+            
 
             if ($response->failed()) {
                 throw new \Exception("The AI backend at Port 8000 did not respond.");
