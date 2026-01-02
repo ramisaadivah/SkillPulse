@@ -1,90 +1,46 @@
-import io
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pypdf import PdfReader
+import io
 
-app = FastAPI(
-    title="Job–Resume Skill Matching API",
-    description="Compares a resume PDF with a job description PDF and returns a match score",
-    version="1.0.0"
-)
+app = FastAPI()
 
-# Static skill database (can later be replaced with DB or ML model)
-SKILL_DB = [
+SKILLS = [
     "python", "javascript", "php", "laravel", "sql", "aws",
     "react", "tailwind", "machine learning", "nlp",
     "security", "docker", "git", "java", "linux"
 ]
 
-
-def extract_text_from_pdf(pdf_bytes: bytes) -> str:
-    """
-    Extract text from a PDF file (bytes) and normalize it.
-    """
+def extract_text(pdf_bytes: bytes) -> str:
     try:
         reader = PdfReader(io.BytesIO(pdf_bytes))
-        text = []
-        for page in reader.pages:
-            extracted = page.extract_text()
-            if extracted:
-                text.append(extracted)
-        return " ".join(text).lower()
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Failed to read PDF file: {str(e)}"
-        )
-
+        return " ".join(
+            page.extract_text() or "" for page in reader.pages
+        ).lower()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid PDF file")
 
 @app.post("/compare-job-resume")
-async def compare_job_resume(
-    resume: UploadFile = File(...),
-    jd: UploadFile = File(...)
-):
-    """
-    Compare resume and job description PDFs and compute skill match score.
-    """
-
+async def compare(resume: UploadFile = File(...), jd: UploadFile = File(...)):
     if resume.content_type != "application/pdf" or jd.content_type != "application/pdf":
-        raise HTTPException(
-            status_code=415,
-            detail="Only PDF files are supported"
-        )
+        raise HTTPException(status_code=415, detail="PDF files only")
 
-    resume_text = extract_text_from_pdf(await resume.read())
-    jd_text = extract_text_from_pdf(await jd.read())
+    resume_text = extract_text(await resume.read())
+    jd_text = extract_text(await jd.read())
 
-    resume_skills = {skill for skill in SKILL_DB if skill in resume_text}
-    jd_skills = {skill for skill in SKILL_DB if skill in jd_text}
+    resume_skills = {s for s in SKILLS if s in resume_text}
+    jd_skills = {s for s in SKILLS if s in jd_text}
 
-    matched_skills = sorted(resume_skills & jd_skills)
-    missing_skills = sorted(jd_skills - resume_skills)
+    matched = sorted(resume_skills & jd_skills)
+    missing = sorted(jd_skills - resume_skills)
 
-    score = round((len(matched_skills) / len(jd_skills)) * 100, 2) if jd_skills else 0.0
-
-    career_map = {
-        "python": "Data Scientist",
-        "machine learning": "ML Engineer",
-        "laravel": "Full Stack Developer",
-        "react": "Frontend Engineer",
-        "security": "Cybersecurity Analyst",
-        "aws": "Cloud Engineer"
-    }
-
-    alternative_careers = sorted(
-        {career_map[skill] for skill in resume_skills if skill in career_map}
-    )
+    score = round((len(matched) / len(jd_skills)) * 100, 2) if jd_skills else 0
 
     return {
-        "match_score": score,
-        "matched_skills": matched_skills,
-        "missing_skills": missing_skills,
-        "suggested_careers": alternative_careers
+        "score": score,
+        "matched": matched,
+        "missing": missing
     }
 
-
 @app.get("/")
-def health_check():
-    """
-    Health check endpoint.
-    """
-    return {"status": "FastAPI service is running"}
+def health():
+    return {"status": "ok"}
