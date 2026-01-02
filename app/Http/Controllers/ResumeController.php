@@ -76,7 +76,7 @@ class ResumeController extends Controller
                 'resume', $resumeContent, $resumeName
             )->attach(
                 'jd', file_get_contents($jdFile), $jdFile->getClientOriginalName()
-            )->post('https://skillpulse-4.onrender.com/compare-job-resume')
+            )->post('https://skillpulse-4.onrender.com/compare-job-resume');
             
 
             if ($response->failed()) {

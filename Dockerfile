@@ -1,21 +1,26 @@
-# Use official Python slim image
-FROM python:3.11-slim
+FROM php:8.2-apache
 
-# Set working directory inside container
-WORKDIR /app
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libpng-dev libonig-dev libxml2-dev zip unzip
 
-# Copy only requirements first (Docker layer caching)
-COPY requirements.txt .
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install dependencies
-RUN python -m pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy the rest of the project
+# Set working directory and copy files
+WORKDIR /var/www/html
 COPY . .
 
-# Expose port for Render
-EXPOSE 10000
+# Install dependencies and set permissions
+RUN composer install --no-dev --optimize-autoloader
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Run FastAPI with uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
+# Configure Apache to point to Laravel's /public folder
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
+
+EXPOSE 80
